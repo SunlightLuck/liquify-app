@@ -1,0 +1,34 @@
+/* @font-face {
+  font-family: "Montserrat";
+  src: url("./assets/fonts/Montserrat/Montserrat-Regular.woff");
+} */
+
+.App {
+  font-family: "Montserrat";
+  /* font-family: "Myriad Pro Regular"; */
+  min-height: 100vh;
+}
+.MuiInputAdornment-positionEnd > .MuiIconButton-root {
+  background: rebeccapurple !important;
+  color: white !important;
+}
+.btn-secondary {
+  background-color: #04bbfb !important;
+  padding: 10px 20px !important;
+  color: white !important;
+}
+.btn-secondary:disabled {
+  color: grey !important;
+  background-color: lightgrey !important;
+}
+.genContent {
+  font-size: 18px;
+}
+/* ::-webkit-datetime-edit { padding: 1em; }
+::-webkit-datetime-edit-fields-wrapper { background: silver; }
+::-webkit-datetime-edit-text { color: red; padding: 0 0.3em; }
+::-webkit-datetime-edit-month-field { color: blue; }
+::-webkit-datetime-edit-day-field { color: green; }
+::-webkit-datetime-edit-year-field { color: purple; }
+::-webkit-inner-spin-button { display: none; }
+::-webkit-calendar-picker-indicator { background: orange; } */
