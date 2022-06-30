@@ -51,7 +51,6 @@ export const usePoktapi = () => {
             24 * 60 * 60 * 1000,
             addresses
           ).then(res => {
-            console.log(res, index)
             rewards[index] = res.total_relays
             dispatch(setMonthlyRewardsData({
             index,
@@ -74,7 +73,6 @@ export const usePoktapi = () => {
     for (index = 0; index < addresses.length; index++) {
       const deploy = await apis.getNode(addresses[index]);
       if (deploy && !homeData.deployed[index]) {
-        console.log("deploy", index)
         dispatch(addDeploy({index, deploy}))
       }
     }
@@ -90,7 +88,6 @@ export const usePoktapi = () => {
     getPrice()
     if (!addresses || addresses.length === 0) return;
     if(!homeData.rewards || !homeData.monthRelay || !homeData.monthToken) {
-      console.log('1, 5')
       apis.getRewardsReport(28 * 24 * 60 * 60 * 1000, -1, addresses).then((res) =>
       dispatch(
         setHomeItem({
@@ -102,7 +99,6 @@ export const usePoktapi = () => {
     );}
 
     if(!homeData.dayPerformance) {
-      console.log('3')
       apis.getNodeRunnerSummary(addresses).then((res) =>
         dispatch(
           setHomeItem({
@@ -117,7 +113,6 @@ export const usePoktapi = () => {
     }
 
     if(!homeData.dailyRelay || !homeData.dailyToken) {
-      console.log('4')
       apis.getRewardsReport(24 * 60 * 60 * 1000, -1, addresses).then((res) =>
         dispatch(
           setHomeItem({
@@ -129,13 +124,11 @@ export const usePoktapi = () => {
     }
 
     if(!homeData.deployedStake || !homeData.deployedTotal){
-      console.log('6')
       getDeploy();
     }
 
     for (let index = 0; index < 24; index++) {
       if(!homeData.hourRelays[index]) {
-        console.log('7', index)
         await apis
           .getRewardsReport(
             (24 - index) * 60 * 60 * 1000,

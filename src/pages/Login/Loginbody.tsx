@@ -26,7 +26,6 @@ const Loginbody: React.FC = () => {
   const login = useCallback(async () => {
     if (email !== "" && password !== "") {
       const { data, error } = await sigin();
-      console.log(data, error);
       if (data && !error) {
         localStorage.setItem("auth", JSON.stringify(data.signin));
         window.location.href = "/home";
@@ -59,8 +58,7 @@ const Loginbody: React.FC = () => {
   }, []);
 
   const onFailure = (res: any) => {
-    console.log("Login failed: res:", res);
-    alert(`Failed to login`);
+    setError("Log in failed");
   };
 
   return (

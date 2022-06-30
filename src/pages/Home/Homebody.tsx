@@ -38,7 +38,6 @@ const Homebody: React.FC = () => {
 
   useEffect(() => {
     if (!homeData.isUpdated) {
-      console.log("update");
       getHomeData();
     }
   }, [addresses]);
