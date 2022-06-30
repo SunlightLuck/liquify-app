@@ -11,8 +11,9 @@ import { homeSelector } from "store/homeReducer";
 const Rewardsbody: React.FC = () => {
   const classes = useStyles();
   const { addresses } = useSelector(userSelector);
-  const { getDeploy, getPrice } = usePoktapi();
-  const { deployedBalance, price } = useSelector(homeSelector);
+  const { getDeploy, getPrice, getMonthlyRewards } = usePoktapi();
+  const { deployedBalance, price, monthlyRewards } = useSelector(homeSelector);
+
   const data = {
     options: {
       chart: {
@@ -31,7 +32,7 @@ const Rewardsbody: React.FC = () => {
     series: [
       {
         name: "series-1",
-        data: Array(28).fill(1),
+        data: monthlyRewards,
       },
     ],
   };
@@ -39,6 +40,7 @@ const Rewardsbody: React.FC = () => {
   useEffect(() => {
     getDeploy();
     getPrice();
+    getMonthlyRewards();
   }, [addresses]);
 
   return (

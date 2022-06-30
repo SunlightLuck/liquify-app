@@ -32,6 +32,16 @@ const queries = {
         addresses
       }
     }
+  `,
+  getMontlyRewards: gql `
+    query ($email: String!) {
+      getMonthlyRewards(email: $email) {
+        monthlyRewards {
+          date
+          reward
+        }
+      }
+    }
   `
 }
 

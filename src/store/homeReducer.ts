@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { stat } from "fs";
 
 interface HomeInfo {
   rewards: Number,
@@ -13,6 +12,7 @@ interface HomeInfo {
   deployedStake: Number,
   deployed: any,
   hourRelays: any,
+  monthlyRewards: any,
   isUpdated: Boolean
 }
 
@@ -28,6 +28,7 @@ const initialState = {
   deployedStake: 0,
   deployed: [],
   hourRelays: Array(24).fill(0),
+  monthlyRewards: Array(28).fill(0),
   isUpdated: false
 } as HomeInfo;
 
@@ -66,10 +67,13 @@ export const homeSlice = createSlice({
     },
     setUpdated: (state, action: PayloadAction<any>) => {
       state.isUpdated = action.payload
+    },
+    setMonthlyRewardsData: (state, action: PayloadAction<any>) => {
+      state.monthlyRewards[action.payload.index] = action.payload.reward
     }
   }
 })
 
-export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy} = homeSlice.actions
+export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy, setMonthlyRewardsData} = homeSlice.actions
 
 export const homeSelector = (state: any) => state.home

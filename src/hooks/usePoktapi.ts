@@ -1,17 +1,66 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setHomeItem, setHomeChart, setUpdated, homeSelector, addDeploy } from "store/homeReducer";
+import { setHomeItem, setHomeChart, setUpdated, homeSelector, addDeploy, setMonthlyRewardsData } from "store/homeReducer";
 import { userSelector } from "store/userReducer";
 import * as apis from '../graphql/poktscan'
+import queries from "graphql/query";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import mutation from "graphql/mutation";
 
 export const usePoktapi = () => {
-  const {addresses} = useSelector(userSelector)
+  const {email, addresses} = useSelector(userSelector)
   const homeData = useSelector(homeSelector)
   const dispatch = useDispatch();
+  const [fetchMonthlyRewards] = useLazyQuery(queries.getMontlyRewards);
+  const [resetMontlyRewards] = useMutation(mutation.setMonthlyRewards)
+  const {monthlyRewards} = useSelector(homeSelector)
 
-  const getMonthlyRewards = useCallback(() => {
+  const getMonthlyRewards = useCallback(async () => {
+    const rewards = [];
+    const data = await fetchMonthlyRewards({variables: {
+      email
+    }})
 
+    let update = 28;
+    const fetchedData = data.data.getMonthlyRewards.monthlyRewards;
+    if(fetchedData && fetchedData.length) {
+      const lastDate = fetchedData[fetchedData.length - 1].date;
+      update = Math.floor((new Date().getTime() - new Date(lastDate).getTime()) / (24 * 60 * 60 * 1000));
+      console.log(update, lastDate)
+      if(update > 28) update = 28;
+      for (let index = fetchedData.length - 28 + update; index < fetchedData.length; index++) {
+        const element = fetchedData[index];
+        dispatch(setMonthlyRewardsData({
+          index: index - fetchedData.length + 28 - update,
+          reward: element.reward
+        }))
+        rewards[index - fetchedData.length + 28 - update] = (element.reward);
+      }
+    }
+    for (let index = 28 - update; index < 28; index++) {
+      await apis
+          .getRewardsReport(
+            (28 - index) * 24 * 60 * 60 * 1000,
+            24 * 60 * 60 * 1000,
+            addresses
+          ).then(res => {
+            console.log(res, index)
+            rewards[index] = res.total_relays
+            dispatch(setMonthlyRewardsData({
+            index,
+            reward: res.total_relays
+          }))})
+    }
+    if(update) {
+      await resetMontlyRewards({variables: {
+        email,
+        monthlyRewards: monthlyRewards.map((el, i) => {return {
+          date: new Date(new Date().getTime() - (28 - i - 1) * 24 * 60 * 60 * 1000).toDateString(),
+          reward: rewards[i]
+        }})
+      }})
+    }
   }, [new Date().getDate()])
 
   const getDeploy = useCallback(async () => {
@@ -99,5 +148,5 @@ export const usePoktapi = () => {
     }
   }, [addresses]);
 
-  return {getHomeData, getDeploy, getPrice}; 
+  return {getHomeData, getDeploy, getPrice, getMonthlyRewards}; 
 }

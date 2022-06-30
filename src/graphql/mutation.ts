@@ -17,6 +17,11 @@ const mutation = {
     mutation ($addressInput: AddressInput!) {
       addAddress(addressInput: $addressInput) 
     }
+  `,
+  setMonthlyRewards: gql`
+    mutation ($email: String!, $monthlyRewards: [DailyRewardInput!]) {
+      setMonthlyRewards(email: $email, monthlyRewards: $monthlyRewards)
+    }
   `
 }
 
