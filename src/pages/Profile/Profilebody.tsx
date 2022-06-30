@@ -6,12 +6,14 @@ import Dropzone from "react-dropzone";
 import { create } from "ipfs-http-client";
 import classnames from "classnames";
 import { getFileBuffer } from "../../utils";
-import AvatarEditor from "react-avatar-editor";
 import Avatar from "react-avatar-edit";
 import Modal from "react-modal";
-import { StylesContext } from "@material-ui/styles";
 
-const client = create({ host: "ipfs.infura.io", port: 5001, protocol: "https" });
+const client = create({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+});
 
 const PrettoSlider = withStyles({
   root: {
@@ -118,9 +120,19 @@ const Profilebody: React.FC = () => {
   }
 
   return (
-    <Box position="relative" style={{ background: "url('images/map-black.png')" }}>
+    <Box
+      position="relative"
+      style={{ background: "url('images/map-black.png')" }}
+    >
       <StyledContainer>
-        <Box className={classes.oneRow} style={{ justifyContent: "space-between", paddingRight: 0, paddingLeft: 0 }}>
+        <Box
+          className={classes.oneRow}
+          style={{
+            justifyContent: "space-between",
+            paddingRight: 0,
+            paddingLeft: 0,
+          }}
+        >
           <Box>
             <Box className={classes.subtitle}>MY PROFILE</Box>
           </Box>
@@ -128,12 +140,30 @@ const Profilebody: React.FC = () => {
         <Box display={"flex"} justifyContent={"center"} mt={"19px"}>
           <Box className={classes.profileModal}>
             <Box display={"flex"} justifyContent={"center"} mb={"28px"}>
-              <Preview>{fileUrl === "" ? <span>A</span> : <img src={saveCrop ? preview : fileUrl} width="100%" height="100%" alt={fileUrl} />}</Preview>
+              <Preview>
+                {fileUrl === "" ? (
+                  <span>A</span>
+                ) : (
+                  <img
+                    src={saveCrop ? preview : fileUrl}
+                    width="100%"
+                    height="100%"
+                    alt={fileUrl}
+                  />
+                )}
+              </Preview>
             </Box>
-            <Dropzone maxFiles={1} accept={["image/png", "image/jpeg", "image/gif"]} onDrop={(acceptedFiles) => dropHandler(acceptedFiles)}>
+            <Dropzone
+              maxFiles={1}
+              accept={["image/png", "image/jpeg", "image/gif"]}
+              onDrop={(acceptedFiles) => dropHandler(acceptedFiles)}
+            >
               {({ getRootProps, getInputProps }) => (
                 <Box display={"flex"} justifyContent={"center"}>
-                  <StyledDropZone className={classes.dropZone} {...getRootProps()}>
+                  <StyledDropZone
+                    className={classes.dropZone}
+                    {...getRootProps()}
+                  >
                     <input {...getInputProps()} />
                     <Box width={"227px"} className={classnames(classes.addBut)}>
                       Upload profile photo
@@ -143,12 +173,30 @@ const Profilebody: React.FC = () => {
               )}
             </Dropzone>
             {fileUrl !== "" && (
-              <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles} contentLabel="Example Modal">
+              <Modal
+                isOpen={modalIsOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
                 <h2 className={classes.profileTitle}>Change profile picture</h2>
                 <AvatarBox>
-                  <Avatar ref={avatarEditor} width={299} height={299} onCrop={(_preview: any) => onCrop(_preview)} onClose={() => onClose()} onBeforeFileLoad={(elem: any) => onBeforeFileLoad(elem)} src={fileUrl} />
+                  <Avatar
+                    ref={avatarEditor}
+                    width={299}
+                    height={299}
+                    onCrop={(_preview: any) => onCrop(_preview)}
+                    onClose={() => onClose()}
+                    onBeforeFileLoad={(elem: any) => onBeforeFileLoad(elem)}
+                    src={fileUrl}
+                  />
                 </AvatarBox>
-                <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
                   <img src={"./images/slide_s.png"} alt="" />
                   {/* <PrettoSlider value={cropValue} onChange={handleCropValuechange} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={20} min={20} max={140} /> */}
                   <img src={"./images/slide_b.png"} alt="" />
@@ -179,7 +227,11 @@ const Profilebody: React.FC = () => {
             <Box className={classes.inputTitle}>Password</Box>
             <input className={classes.inputBox}></input>
             <Box display={"flex"} justifyContent={"center"} mt={"31px"}>
-              <Box width={"192px"} className={classes.addBut} onClick={() => setShowModal(!showModal)}>
+              <Box
+                width={"192px"}
+                className={classes.addBut}
+                onClick={() => setShowModal(!showModal)}
+              >
                 Update
               </Box>
             </Box>

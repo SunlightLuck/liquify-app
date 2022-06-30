@@ -21,5 +21,4 @@ export const getTokenId = (transaction) => {
   //   return event.returnValues.tokenId.toString();
   // }
   return parseInt(transaction.events[1].topics[1].toString(10), 16);
-  throw new Error('Unable to get token id');
 };

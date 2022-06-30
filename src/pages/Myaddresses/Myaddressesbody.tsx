@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSelector, addNewAddress } from "store/userReducer";
 import { useMutation } from "@apollo/client";
 import mutation from "graphql/mutation";
-import { setUpdated } from "store/homeReducer";
+import { homeSelector, setUpdated } from "store/homeReducer";
+import * as apis from "../../graphql/poktscan/";
+import { usePoktapi } from "hooks/usePoktapi";
 
 const Myaddressesbody: React.FC = () => {
   const classes = useStyles();
@@ -15,6 +17,14 @@ const Myaddressesbody: React.FC = () => {
   const [address, setAddress] = useState("");
   const [addAddress] = useMutation(mutation.addAddress);
   const dispatch = useDispatch();
+  const { price, deployed } = useSelector(homeSelector);
+  const { getDeploy, getPrice } = usePoktapi();
+  console.log(deployed);
+
+  useEffect(() => {
+    getDeploy();
+    getPrice();
+  }, [addresses]);
 
   const addAddressHandler = useCallback(async () => {
     if (address.length != 40) {
@@ -36,6 +46,7 @@ const Myaddressesbody: React.FC = () => {
     };
     localStorage.setItem("auth", JSON.stringify(authData));
     setShowModal(!showModal);
+    const deploy = await apis.getNode(address);
   }, [address, addresses]);
 
   return (
@@ -111,15 +122,26 @@ const Myaddressesbody: React.FC = () => {
               </Box>
               <Box style={{ overflow: "auto" }}>
                 {addresses &&
-                  addresses.map((ad) => (
+                  addresses.map((ad, i) => (
                     <Box className={classes.tableBody} key={ad}>
                       <Typography style={{ flex: 2 }}>
                         Pocket Network
                       </Typography>
                       <Typography style={{ flex: 2 }}>{ad}</Typography>
                       <Typography style={{ flex: 2 }}>
-                        123,456,123.00 PKT{" "}
-                        <Typography>($123,456,123.00)</Typography>
+                        {(deployed[i]
+                          ? deployed[i].balance / 1000000
+                          : 0
+                        ).toFixed(2)}{" "}
+                        PKT{" "}
+                        <Typography>
+                          ($
+                          {(
+                            (deployed[i] ? deployed[i].balance / 1000000 : 0) *
+                            price
+                          ).toFixed(2)}
+                          )
+                        </Typography>
                       </Typography>
                     </Box>
                   ))}

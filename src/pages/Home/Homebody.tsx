@@ -8,13 +8,13 @@ import HalfPieGChart from "components/HalfPieGChart/HalfPieGChart";
 import { useSelector } from "react-redux";
 import { userSelector } from "store/userReducer";
 import { homeSelector } from "store/homeReducer";
-import { useHomeData } from "hooks/useHomeData";
+import { usePoktapi } from "hooks/usePoktapi";
 
 const Homebody: React.FC = () => {
   const classes = useStyles();
   const { addresses } = useSelector(userSelector);
   const homeData = useSelector(homeSelector);
-  const getHomeData = useHomeData();
+  const { getHomeData } = usePoktapi();
 
   const curHour = new Date().getHours();
   const data = {
@@ -246,7 +246,7 @@ const Homebody: React.FC = () => {
                 style={{
                   background: "#1C39BB",
                   width: `${
-                    (homeData.deployedTotal / homeData.deployedStake) * 100
+                    (homeData.deployedStake / homeData.deployedTotal) * 100
                   }%`,
                 }}
               ></Box>

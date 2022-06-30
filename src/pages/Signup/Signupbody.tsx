@@ -40,7 +40,7 @@ const Signupbody: React.FC = () => {
     }
     if (agreed) {
       try {
-        const data = await signup({
+        await signup({
           variables: {
             userInput: {
               firstName,
