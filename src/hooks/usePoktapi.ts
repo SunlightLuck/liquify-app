@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setHomeItem, setHomeChart, setUpdated, homeSelector, addDeploy, setMonthlyRewardsData } from "store/homeReducer";
+import { setHomeItem, setHomeChart, setUpdated, homeSelector, addDeploy, setMonthlyRewardsData, setRewardsHistory } from "store/homeReducer";
 import { userSelector } from "store/userReducer";
 import * as apis from '../graphql/poktscan'
 import queries from "graphql/query";
@@ -16,6 +16,12 @@ export const usePoktapi = () => {
   const [resetMontlyRewards] = useMutation(mutation.setMonthlyRewards)
   const {monthlyRewards} = useSelector(homeSelector)
 
+  const getRewardsHistory = useCallback(async () => {
+    for (let index = 0; index < addresses.length; index++) {
+      apis.getRewardsReport(28 * 24 * 60 * 60 * 1000, -1, [addresses[index]]).then(res => dispatch(setRewardsHistory({address: addresses[index], reward: res.total_rewards, date: new Date().toLocaleDateString(), validator: addresses[index]})));
+    }
+  }, [addresses])
+
   const getMonthlyRewards = useCallback(async () => {
     const rewards = [];
     const data = await fetchMonthlyRewards({variables: {
@@ -27,7 +33,6 @@ export const usePoktapi = () => {
     if(fetchedData && fetchedData.length) {
       const lastDate = fetchedData[fetchedData.length - 1].date;
       update = Math.floor((new Date().getTime() - new Date(lastDate).getTime()) / (24 * 60 * 60 * 1000));
-      console.log(update, lastDate)
       if(update > 28) update = 28;
       for (let index = fetchedData.length - 28 + update; index < fetchedData.length; index++) {
         const element = fetchedData[index];
@@ -148,5 +153,5 @@ export const usePoktapi = () => {
     }
   }, [addresses]);
 
-  return {getHomeData, getDeploy, getPrice, getMonthlyRewards}; 
+  return {getHomeData, getDeploy, getPrice, getMonthlyRewards, getRewardsHistory}; 
 }

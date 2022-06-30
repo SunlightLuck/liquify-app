@@ -11,8 +11,10 @@ import { homeSelector } from "store/homeReducer";
 const Rewardsbody: React.FC = () => {
   const classes = useStyles();
   const { addresses } = useSelector(userSelector);
-  const { getDeploy, getPrice, getMonthlyRewards } = usePoktapi();
-  const { deployedBalance, price, monthlyRewards } = useSelector(homeSelector);
+  const { getDeploy, getPrice, getMonthlyRewards, getRewardsHistory } =
+    usePoktapi();
+  const { deployedBalance, price, monthlyRewards, rewardHistory } =
+    useSelector(homeSelector);
 
   const data = {
     options: {
@@ -41,6 +43,7 @@ const Rewardsbody: React.FC = () => {
     getDeploy();
     getPrice();
     getMonthlyRewards();
+    getRewardsHistory();
   }, [addresses]);
 
   return (
@@ -192,96 +195,43 @@ const Rewardsbody: React.FC = () => {
               <Typography style={{ flex: 2 }}>Validator</Typography>
             </Box>
             <Box style={{ overflow: "auto", width: "100%" }}>
-              <Box className={classes.tableBody}>
-                <Typography style={{ flex: 1 }}>01/01/2022</Typography>
-                <Typography style={{ flex: 1 }}>Pocket Network</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-                <Typography style={{ flex: 1 }}>0.00 PKT</Typography>
-                <Typography style={{ flex: 1 }}>$1,200.00</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-              </Box>
-              <Box className={classes.tableBody}>
-                <Typography style={{ flex: 1 }}>01/01/2022</Typography>
-                <Typography style={{ flex: 1 }}>Pocket Network</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-                <Typography style={{ flex: 1 }}>0.00 PKT</Typography>
-                <Typography style={{ flex: 1 }}>$1,200.00</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-              </Box>
-              <Box className={classes.tableBody}>
-                <Typography style={{ flex: 1 }}>01/01/2022</Typography>
-                <Typography style={{ flex: 1 }}>Pocket Network</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-                <Typography style={{ flex: 1 }}>0.00 PKT</Typography>
-                <Typography style={{ flex: 1 }}>$1,200.00</Typography>
-                <Typography style={{ flex: 2 }}>
-                  0xbe30fc3585E13eC6...
-                  <img
-                    src="images/copy.png"
-                    alt="copy"
-                    style={{
-                      width: "20px",
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Typography>
-              </Box>
+              {rewardHistory &&
+                rewardHistory.map((item, i) => (
+                  <Box className={classes.tableBody}>
+                    <Typography style={{ flex: 1 }}>{item.date}</Typography>
+                    <Typography style={{ flex: 1 }}>Pocket Network</Typography>
+                    <Typography style={{ flex: 2 }}>
+                      {item.address}
+                      <img
+                        src="images/copy.png"
+                        alt="copy"
+                        style={{
+                          width: "20px",
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Typography>
+                    <Typography style={{ flex: 1 }}>
+                      {item.reward.toFixed(2)} PKT
+                    </Typography>
+                    <Typography style={{ flex: 1 }}>
+                      ${(item.reward * price).toFixed(2)}
+                    </Typography>
+                    <Typography style={{ flex: 2 }}>
+                      {item.validator}
+                      <img
+                        src="images/copy.png"
+                        alt="copy"
+                        style={{
+                          width: "20px",
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Typography>
+                  </Box>
+                ))}
             </Box>
             <Box className={classes.tableFooter}>
               <Typography

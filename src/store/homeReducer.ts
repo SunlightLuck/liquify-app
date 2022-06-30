@@ -13,6 +13,7 @@ interface HomeInfo {
   deployed: any,
   hourRelays: any,
   monthlyRewards: any,
+  rewardHistory: any,
   isUpdated: Boolean
 }
 
@@ -29,6 +30,7 @@ const initialState = {
   deployed: [],
   hourRelays: Array(24).fill(0),
   monthlyRewards: Array(28).fill(0),
+  rewardHistory: [],
   isUpdated: false
 } as HomeInfo;
 
@@ -70,10 +72,13 @@ export const homeSlice = createSlice({
     },
     setMonthlyRewardsData: (state, action: PayloadAction<any>) => {
       state.monthlyRewards[action.payload.index] = action.payload.reward
+    },
+    setRewardsHistory: (state, action: PayloadAction<any>) => {
+      state.rewardHistory = [...state.rewardHistory, action.payload]
     }
   }
 })
 
-export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy, setMonthlyRewardsData} = homeSlice.actions
+export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy, setMonthlyRewardsData, setRewardsHistory} = homeSlice.actions
 
 export const homeSelector = (state: any) => state.home
