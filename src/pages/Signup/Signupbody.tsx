@@ -39,22 +39,21 @@ const Signupbody: React.FC = () => {
       return;
     }
     if (agreed) {
-      const data = await signup({
-        variables: {
-          userInput: {
-            firstName,
-            lastName,
-            email,
-            phone,
-            password,
+      try {
+        const data = await signup({
+          variables: {
+            userInput: {
+              firstName,
+              lastName,
+              email,
+              phone,
+              password,
+            },
           },
-        },
-      });
-      console.log(data);
-      if (data) {
+        });
         history.push("/login");
-      } else {
-        setError("Register failed.");
+      } catch (err) {
+        setError(err.message);
       }
     } else {
       setError("Agree to privacy policy");
