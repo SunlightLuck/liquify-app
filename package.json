@@ -99,8 +99,8 @@
     "@types/aos": "^3.0.4",
     "eslint-import-resolver-typescript": "^2.5.0"
   },
-  "engines": { 
-    "node": "16.9.0" 
-   }, 
+  "engines": {
+    "node": "16.9.0"
+  },
   "proxy": "https://poktscan.com/api/graphql/"
 }

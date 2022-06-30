@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { Box } from "@material-ui/core";
+import { Box, Snackbar } from "@material-ui/core";
+import { Alert, AlertTitle } from "@mui/material";
 import GoogleLogin from "react-google-login";
 import { useDispatch } from "react-redux";
 import { setPageName } from "store/handleSidebar";
@@ -9,12 +10,8 @@ import { useLazyQuery } from "@apollo/client";
 
 import queries from "../../graphql/query";
 import { setUserData } from "store/userReducer";
-import { refreshTokenSetup } from "utils/refreshTokenSetup";
 
 const Loginbody: React.FC = () => {
-  const responseGoogle = (response: any) => {
-    console.log(response);
-  };
   const [enableSwitch, setEnableSwitch] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +21,7 @@ const Loginbody: React.FC = () => {
     variables: { email, password },
   });
   const [googleSignin, {}] = useLazyQuery(queries.googleSignin);
+  const [error, setError] = useState("");
 
   const login = useCallback(async () => {
     if (email !== "" && password !== "") {
@@ -34,8 +32,12 @@ const Loginbody: React.FC = () => {
         window.location.href = "/home";
         dispatch(setPageName("Home"));
         dispatch(setUserData(data.signin));
+      } else {
+        setError(error.message);
       }
-    } else alert("Empty values");
+    } else {
+      setError("Invalid fields exist");
+    }
   }, [email, password]);
 
   const onSuccess = async (res: any) => {
@@ -48,10 +50,13 @@ const Loginbody: React.FC = () => {
       dispatch(setPageName("Home"));
       dispatch(setUserData(data.data.googleSignin));
     } else {
-      alert(data.error.message);
+      setError(data.error.message);
     }
-    //    refreshTokenSetup(res);
   };
+
+  const notificationClose = useCallback(() => {
+    setError("");
+  }, []);
 
   const onFailure = (res: any) => {
     console.log("Login failed: res:", res);
@@ -183,6 +188,22 @@ const Loginbody: React.FC = () => {
           </Box>
         </CreateGroupe>
       </LargeGroup>
+      <Snackbar
+        open={error !== ""}
+        autoHideDuration={4000}
+        onClose={notificationClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" } as any}
+      >
+        <Alert
+          onClose={notificationClose}
+          severity="error"
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          <AlertTitle>Error</AlertTitle>
+          {error}
+        </Alert>
+      </Snackbar>
     </StyledContainer>
   );
 };
