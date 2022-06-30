@@ -10,6 +10,10 @@ export const usePoktapi = () => {
   const homeData = useSelector(homeSelector)
   const dispatch = useDispatch();
 
+  const getMonthlyRewards = useCallback(() => {
+
+  }, [new Date().getDate()])
+
   const getDeploy = useCallback(async () => {
     let index;
     for (index = 0; index < addresses.length; index++) {

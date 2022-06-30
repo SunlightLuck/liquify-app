@@ -235,7 +235,8 @@ const Homebody: React.FC = () => {
               style={{ color: "black", fontSize: "20px", fontWeight: "600" }}
             >
               {homeData.deployedStake.toFixed(2)} /{" "}
-              {homeData.deployedTotal.toFixed(2)} PKT
+              {(homeData.deployedStake + homeData.deployedBalance).toFixed(2)}{" "}
+              PKT
             </Typography>
             <Box
               className={classes.progressbar}
@@ -246,7 +247,9 @@ const Homebody: React.FC = () => {
                 style={{
                   background: "#1C39BB",
                   width: `${
-                    (homeData.deployedStake / homeData.deployedTotal) * 100
+                    (homeData.deployedStake /
+                      (homeData.deployedStake + homeData.deployedBalance)) *
+                    100
                   }%`,
                 }}
               ></Box>
@@ -281,7 +284,9 @@ const Homebody: React.FC = () => {
                   <Box>TOTAL</Box>
                 </Box>
                 <Box style={{ fontWeight: 600, fontSize: "20px" }}>
-                  {homeData.deployedTotal.toFixed(2)}
+                  {(homeData.deployedStake + homeData.deployedBalance).toFixed(
+                    2
+                  )}
                 </Box>
               </Box>
             </Box>

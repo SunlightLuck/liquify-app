@@ -9,8 +9,8 @@ interface HomeInfo {
   dailyToken: Number,
   monthRelay: Number,
   monthToken: Number,
+  deployedBalance: Number,
   deployedStake: Number,
-  deployedTotal: Number,
   deployed: any,
   hourRelays: any,
   isUpdated: Boolean
@@ -24,8 +24,8 @@ const initialState = {
   dailyToken: 0,
   monthRelay: 0,
   monthToken: 0,
+  deployedBalance: 0,
   deployedStake: 0,
-  deployedTotal: 0,
   deployed: [],
   hourRelays: Array(24).fill(0),
   isUpdated: false
@@ -43,8 +43,8 @@ export const homeSlice = createSlice({
       state.dailyToken = action.payload.dailyToken;
       state.monthRelay = action.payload.monthRelay;
       state.monthToken = action.payload.monthToken;
+      state.deployedBalance = action.payload.deployedBalance;
       state.deployedStake = action.payload.deployedStake;
-      state.deployedTotal = action.payload.deployedTotal;
       state.hourRelays = action.payload.hourRelays;
       state.isUpdated = true;
     },
@@ -62,7 +62,7 @@ export const homeSlice = createSlice({
     addDeploy: (state, action: PayloadAction<any>) => {
       state.deployed[action.payload.index] = action.payload.deploy;
       state.deployedStake += (parseFloat(action.payload.deploy.tokens) / 1000000) as any;
-      state.deployedTotal += ((parseFloat(action.payload.deploy.tokens) + action.payload.deploy.balance) /1000000) as any;
+      state.deployedBalance += (action.payload.deploy.balance /1000000) as any;
     },
     setUpdated: (state, action: PayloadAction<any>) => {
       state.isUpdated = action.payload
