@@ -75,10 +75,13 @@ export const homeSlice = createSlice({
     },
     setRewardsHistory: (state, action: PayloadAction<any>) => {
       state.rewardHistory = [...state.rewardHistory, action.payload]
+    },
+    clearRewardsHistory: (state) => {
+      state.rewardHistory = [];
     }
   }
 })
 
-export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy, setMonthlyRewardsData, setRewardsHistory} = homeSlice.actions
+export const {setHomeData, setHomeItem, setHomeChart, setUpdated, addDeploy, setMonthlyRewardsData, setRewardsHistory, clearRewardsHistory} = homeSlice.actions
 
 export const homeSelector = (state: any) => state.home
