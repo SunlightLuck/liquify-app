@@ -62,7 +62,7 @@ export const homeSlice = createSlice({
     addDeploy: (state, action: PayloadAction<any>) => {
       state.deployed[action.payload.index] = action.payload.deploy;
       state.deployedStake += (parseFloat(action.payload.deploy.tokens) / 1000000) as any;
-      state.deployedTotal += ((parseFloat(action.payload.deploy.tokens) + action.payload.deploy.balance) /100000) as any;
+      state.deployedTotal += ((parseFloat(action.payload.deploy.tokens) + action.payload.deploy.balance) /1000000) as any;
     },
     setUpdated: (state, action: PayloadAction<any>) => {
       state.isUpdated = action.payload

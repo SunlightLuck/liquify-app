@@ -15,6 +15,7 @@ export const usePoktapi = () => {
     for (index = 0; index < addresses.length; index++) {
       const deploy = await apis.getNode(addresses[index]);
       if (deploy && !homeData.deployed[index]) {
+        console.log("deploy", index)
         dispatch(addDeploy({index, deploy}))
       }
     }
@@ -26,6 +27,7 @@ export const usePoktapi = () => {
   }, [homeData.price]);
 
   const getHomeData = useCallback(async () => {
+    dispatch(setUpdated(true));
     getPrice()
     if (!addresses || addresses.length === 0) return;
     if(!homeData.rewards || !homeData.monthRelay || !homeData.monthToken) {
@@ -91,7 +93,6 @@ export const usePoktapi = () => {
           );
       }
     }
-    dispatch(setUpdated(true));
   }, [addresses]);
 
   return {getHomeData, getDeploy, getPrice}; 
